@@ -133,6 +133,7 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
             throw new Error("'id' não encontrado!")
         }
 
+        await db("users_tasks").del().where({ user_id: idToDelete })
         await db("users").del().where({ id: idToDelete })
 
         res.status(200).send({ message: "User deletado com sucesso!" })
@@ -298,7 +299,7 @@ app.put("/tasks/:id", async (req: Request, res: Response) => {
         }
 
         if (newStatus !== undefined) {
-            if (typeof newStatus !== "string") {
+            if (typeof newStatus !== "number") {
                 res.status(400)
                 throw new Error("'status' deve ser number (0 para incompleta ou 1 para completa)!")
             }
@@ -358,6 +359,7 @@ app.delete("/tasks/:id", async (req: Request, res: Response) => {
             throw new Error("'id' não encontrado!")
         }
 
+        await db("users_tasks").del().where({ task_id: idToDelete })
         await db("tasks").del().where({ id: idToDelete })
 
         res.status(200).send({ message: "Task deletada com sucesso!" })
